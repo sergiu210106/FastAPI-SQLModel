@@ -25,6 +25,12 @@ class Item (SQLModel, table = True):
     name: str = Field (index = True)
     description: str | None = None
 
+class User(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    name: str = Field(index=True)
+    email: str = Field(index=True)
+    age: int | None = None
+
 # 3: create db and tables 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
@@ -97,3 +103,45 @@ def delete_item(item_id: int, session: SessionDep):
     return {"ok": True}
 
 
+@app.post("/users/")
+def create_user(user: User, session: SessionDep):
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
+
+@app.get("/users")
+def read_users(session: SessionDep) -> list[User]:
+    return session.exec(select(User)).all()
+
+@app.get("/users/{user_id}", response_model=User)
+def read_user(user_id: int, session: SessionDep):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+@app.patch("/users/{user_id}", response_model=User)
+def update_user(user_id: int, user_data: User, session: SessionDep):
+    db_user = session.get(User, user_id)
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    user_data_dict = user_data.model_dump(exclude_unset=True)
+    for key, value in user_data_dict.items():
+        setattr(db_user, key, value)
+    
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
+    return db_user
+
+@app.delete("/users/{user_id}")
+def delete_user(user_id: int, session: SessionDep):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    session.delete(user)
+    session.commit()
+    return {"ok": True}

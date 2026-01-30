@@ -104,7 +104,7 @@ Server will start at:
 ------------------------------------------------------------------------
 
 ## 📌 API Endpoints
-
+### Items
 ### ➕ Create Item
 
 POST `/items/`
@@ -137,6 +137,41 @@ PATCH `/items/{item_id}`
 ### ❌ Delete Item
 
 DELETE `/items/{item_id}`
+### Users
+### ➕ Create User
+
+POST `/users/`
+
+``` json
+{
+  "name": "Alice Smith",
+  "email": "alice@example.com",
+  "age": 30
+}
+```
+
+### 📄 Get All Items
+
+GET `/users`
+
+### 🔍 Get User by ID
+
+GET `/users/{user_id}`
+
+### ✏️ Update User
+
+PATCH `/users/{user_id}`
+
+``` json
+{
+    "age": 31
+}
+```
+
+### ❌ Delete Item
+
+DELETE `/users/{user_id}`
+
 
 ------------------------------------------------------------------------
 
