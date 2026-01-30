@@ -1,0 +1,12 @@
+[project]
+name = "fastapi-postgres-bmw"
+version = "0.1.0"
+description = "Fastapi and Postgres app"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dotenv>=0.9.9",
+    "fastapi[standard]>=0.128.0",
+    "psycopg2-binary>=2.9.11",
+    "sqlmodel>=0.0.31",
+]
