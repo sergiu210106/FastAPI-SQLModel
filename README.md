@@ -49,8 +49,7 @@ injection, and database lifecycle management.
 ### 1. Clone the repository
 
 ``` bash
-git clone <your-repo-url>
-cd <your-project>
+git clone https://github.com/sergiu210106/FastAPI-SQLModel.git
 ```
 
 ### 2. Create a virtual environment
