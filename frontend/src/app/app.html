@@ -1,0 +1,50 @@
+<style>
+  .card { padding: 20px; border: 1px solid #ccc; margin: 20px; border-radius: 8px; }
+  .error { color: red; }
+  .success { color: green; }
+  
+  .drop-zone {
+    padding: 40px; margin: 20px 0; border: 2px dashed #ccc; border-radius: 8px;
+    text-align: center; cursor: pointer;
+  }
+  .drop-zone.active { border-color: #007bff; background-color: #f0f8ff; }
+</style>
+
+<div class="card">
+  <h1>FastAPI + Angular Test</h1>
+  
+  <!-- Use 'as e' to unwrap the signal safely -->
+  <div *ngIf="error() as e" class="error">{{ e }}</div>
+  
+  <!-- Use 'as d' to unwrap the signal safely -->
+  <div *ngIf="data() as d" class="success">
+    <pre>{{ d | json }}</pre>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Parentheses Validator</h2>
+  
+  <div 
+    class="drop-zone" 
+    [class.active]="isDragging"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    (click)="fileInput.click()">
+    
+    <p><strong>Drag & Drop a text file here</strong></p>
+    <p>or click to select a file</p>
+    
+    <input #fileInput type="file" hidden (change)="onFileSelected($event)">
+  </div>
+
+  <!-- Use 'as res' to unwrap the signal safely -->
+  <div *ngIf="uploadResponse() as res" style="margin-top: 20px;">
+    <h3>Result:</h3>
+    <!-- Now you can use 'res' like a normal object -->
+    <p [class.success]="res.valid" [class.error]="!res.valid" style="font-weight: bold;">
+      {{ res.message }}
+    </p>
+  </div>
+</div>

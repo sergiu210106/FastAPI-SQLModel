@@ -47,7 +47,7 @@ async def lifespan (app : FastAPI):
     try:
         with engine.connect() as connection:
             connection.execute(text("SELECT 1"))
-            print("connection succesful!")
+            print("connection successful!")
     except Exception as e:
         print(f"connection failed! {e}")
     # start-up
@@ -145,3 +145,44 @@ def delete_user(user_id: int, session: SessionDep):
     session.delete(user)
     session.commit()
     return {"ok": True}
+
+
+# communicating with frontend
+
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "http://localhost:4200", 
+    "http://127.0.0.1:4200",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+async def root():
+    return {"message": "Hello from FastAPI"}
+
+@app.get("/api/data")
+async def get_data():
+    return {"data": [1, 2, 3, 4, 5]}
+
+# uploading file for parantheses check
+
+from fastapi import UploadFile, File
+from parantheses_validator import validate_paranthesis
+
+@app.post("/check-parantheses")
+async def check_parantheses(file: UploadFile = File(...)):
+    try:
+        contents = await file.read()
+        text = contents.decode('utf-8')
+        return validate_paranthesis(text)
+    except Exception as e:
+        return {"valid": False, "message": f"Error processing file: {str(e)}"}
+
